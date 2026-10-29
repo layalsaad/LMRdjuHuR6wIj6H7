@@ -1,0 +1,40 @@
+[project]
+name = "term-deposit"
+version = "0.1.0"
+description = "Predict which bank customers will subscribe to a term deposit, and explain why."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "joblib>=1.4",
+    "numpy>=2.0",
+    "pandas>=2.2",
+    "scikit-learn>=1.5",
+    "scipy>=1.13",
+]
+
+[project.scripts]
+term-deposit-train = "term_deposit.train:main"
+term-deposit-predict = "term_deposit.predict:main"
+
+[dependency-groups]
+dev = [
+    "jupyterlab>=4.2",
+    "matplotlib>=3.9",
+    "pytest>=8.3",
+    "ruff>=0.6",
+    "seaborn>=0.13",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.ruff]
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"

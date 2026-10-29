@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+*.egg-info/
+build/
+dist/
+
+# Tooling caches
+.pytest_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+
+# Data and trained models are not versioned
+data/raw/*
+!data/raw/.gitkeep
+models/
+predictions.csv
+
+# OS / editors
+.DS_Store
+.idea/
+.vscode/
