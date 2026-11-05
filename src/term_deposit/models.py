@@ -7,13 +7,19 @@ from sklearn.compose import ColumnTransformer
 from sklearn.dummy import DummyClassifier
 from sklearn.ensemble import HistGradientBoostingClassifier, RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
-from sklearn.model_selection import GridSearchCV
+from sklearn.model_selection import GridSearchCV, TunedThresholdClassifierCV
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, OrdinalEncoder, StandardScaler
 from sklearn.tree import DecisionTreeClassifier
 
 from term_deposit.config import BINARY, CATEGORICAL, NUMERIC, RANDOM_STATE, YES_NO
 from term_deposit.evaluation import MAIN_METRIC, inner_cv
+
+
+# The yes/no cut-off maximises F1, which balances finding buyers (recall) against wasted calls
+# (precision). It is a default for when the cost of a call and the value of a sale are unknown;
+# the gains table in notebook 02 shows the result of calling any other share of customers.
+THRESHOLD_METRIC = "f1"
 
 
 def make_preparer(features: list[str], scale: bool = False) -> ColumnTransformer:
@@ -91,3 +97,16 @@ def get_candidates(random_state: int = RANDOM_STATE) -> dict[str, Candidate]:
             {"learning_rate": [0.05, 0.1], "max_leaf_nodes": [15, 31]},
         ),
     }
+
+
+
+
+def with_threshold(estimator: BaseEstimator) -> TunedThresholdClassifierCV:
+    """Wrap `estimator` so it learns its yes/no cut-off from its own training data.
+
+    A fixed cut-off of 0.5 says "no" to almost everyone when only 7% buy. The cut-off is
+    chosen with an inner CV on the training data only, so test scores stay honest.
+    """
+    return TunedThresholdClassifierCV(estimator, scoring=THRESHOLD_METRIC, cv=inner_cv())
+
+

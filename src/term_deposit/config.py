@@ -51,3 +51,8 @@ STAGES = {
 # Evaluation: the brief asks for the average over 5-fold cross-validation.
 RANDOM_STATE = 42
 CV_SPLITS = 5
+
+
+# Model used for each stage, chosen in notebooks/02_modeling.ipynb: gradient boosting ties with
+# random forest on average precision, trains several times faster, and beats the simpler models.
+FINAL_MODEL = {"pre_call": "gradient_boosting", "post_call": "gradient_boosting"}
