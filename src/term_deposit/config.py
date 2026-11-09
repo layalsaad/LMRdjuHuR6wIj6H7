@@ -48,6 +48,12 @@ STAGES = {
     "post_call": FEATURES,
 }
 
+
+# What the bank knows about a customer before any campaign, as opposed to when and how it calls
+# (month, day, contact, campaign). Customer segments are built from these columns only, so they
+# describe people and can be found in the customer list before a campaign starts.
+PROFILE_FEATURES = ["age", "job", "marital", "education", "default", "balance", "housing", "loan"]
+
 # Evaluation: the brief asks for the average over 5-fold cross-validation.
 RANDOM_STATE = 42
 CV_SPLITS = 5
